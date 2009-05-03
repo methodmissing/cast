@@ -814,9 +814,9 @@ restrict return short signed sizeof static struct switch typedef union
       when [:long, :double, :_Imaginary]
         Imaginary.new :longness => 2
       else
-        if type_specs.length == 1 &&
-            [CustomType, Struct, Union, Enum].any?{|c| type_specs[0].is_a? c}
-          type_specs[0]
+        if type_specs.length >= 1 &&
+            [CustomType, Struct, Union, Enum].any?{|c| type_specs.last.is_a? c}
+          type_specs.last
         else
           if type_specs == []
             parse_error pos, "no type specifiers given"

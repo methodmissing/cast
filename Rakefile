@@ -25,6 +25,14 @@ end
 # parser
 file 'lib/cast/c.tab.rb' => 'lib/cast/c.y' do |t|
   sh "racc #{t.prerequisites[0]}"
+  fix_array_namespace!
+end
+
+def fix_array_namespace!
+  fixed = IO.read( 'lib/cast/c.tab.rb' ).gsub( /\sArray\.new\(/, '::Array.new( ' )
+  File.open( 'lib/cast/c.tab.rb', 'w+' ) do |f|
+    f << fixed
+  end  
 end
 
 desc "Build."
@@ -75,7 +83,7 @@ spec = Gem::Specification.new do |s|
   s.extensions << 'ext/extconf.rb'
   s.files = FILES.to_a
   s.autorequire = 'cast'
-  s.test_file = 'test/run.rb'
+  #s.test_file = 'test/run.rb'
   s.has_rdoc = false
 end
 
